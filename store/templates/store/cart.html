@@ -1,0 +1,54 @@
+{% extends 'blog/base.html' %}
+
+{% block scripts %}
+    <script>
+        $( document ).ready(function() {
+            var sum = 0;
+            $('.total-price').each(function(){
+                sum += parseFloat($(this).text());
+            });
+
+            sum = Math.round(sum * 100) / 100
+            $('#sum-of-prices').text(sum);
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <h1>Twój koszyk</h1>
+    <div class="content container">
+        <div class = "row">
+            {% for purchase in purchases %}
+                <div class = "col-sm-6 col-md-4">
+                    <div class = "thumbnail">
+                        <a href="{% url 'item_detail' pk=purchase.item.pk %}">
+                            <img src = "../media/{% if purchase.item.image %}{{ purchase.item.image }}{% else %}no_photo.jpg{% endif %}"
+                                alt = "Place for photo" width="300" height="300">
+                        </a>
+                    </div>
+
+                    <div class = "caption">
+                        <h2>{{ purchase.item.name }}</h2>
+                        <p>Ilość: {{ purchase.amount }}</p>
+                        <p>Cena: {{ purchase.item.price }} x {{ purchase.amount }} = <span class="total-price">{{ purchase.total_price }}</span></p>
+
+                        <p>
+                            <a href = "{% url 'purchase_remove' pk=purchase.pk %}" class = "btn btn-danger" role = "button">
+                                Usuń
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class = "row">
+            <div class="col-md-4">
+                <h2>Łącznie do zapłaty: <span id="sum-of-prices">0.00</span> zł</h2>
+            </div>
+            <div class="col-md-4">
+                <br/>
+                <a class = "btn btn-primary" role = "button" href="{% url 'accept_cart' %}">Zapłać</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

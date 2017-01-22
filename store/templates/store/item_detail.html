@@ -4,8 +4,30 @@
     <script>
         $( document ).ready(function() {
             $("#add-button").click(function() {
-{#                alert( "Handler for .click() called." );#}
                 $("#add-form").toggle(500);
+            });
+
+            cart_base_url = $('#accept-button').attr("href");
+            cart_base_url = cart_base_url.slice(0, -2);
+
+            amount = $('#amount').val();
+            if (amount < 1 || amount > {{ item.stock }}) {
+                amount = 1;
+                $('#amount').val(amount);
+                alert("Ilość nie może być większa niż ilość w magazynie");
+            }
+            new_url = cart_base_url+$('#amount').val()+"/";
+            $("#accept-button").attr("href", new_url);
+
+            $('#amount').change(function() {
+                amount = $('#amount').val();
+                if (amount < 1 || amount > {{ item.stock }}) {
+                    amount = 1;
+                    $('#amount').val(amount);
+                    alert("Ilość nie może być większa niż ilość w magazynie");
+                }
+                new_url = cart_base_url+$('#amount').val()+"/";
+                $("#accept-button").attr("href", new_url);
             });
         });
     </script>
@@ -35,8 +57,8 @@
                         <form>
                             <p>
                                 Ilość:
-                                <input type="number" min="1" max="{{ item.stock }}" value="1">
-                                <a class = "btn btn-primary"
+                                <input type="number" min="1" max="{{ item.stock }}" value="1" id="amount">
+                                <a class = "btn btn-primary" href="{% url 'purchase_add' item_id=item.pk amount=1 %}"
                                    role = "button" id="accept-button" {% if item.stock == 0 %}disabled{% endif %}>
                                     Dodaj
                                 </a>

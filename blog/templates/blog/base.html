@@ -12,13 +12,14 @@
     <body>
         <div class="page-header">
             {% if user.is_authenticated %}
+                <a href="{% url 'cart' %}" class="top-menu"><span class="glyphicon glyphicon-shopping-cart"></span></a>
                 <a href="{% url 'post_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
                 <a href="{% url 'post_draft_list' %}" class="top-menu"><span class="glyphicon glyphicon-edit"></span></a>
                 <p class="top-menu">Witaj {{ user.username }} <small>(<a href="{% url 'logout' %}" class="gray-link">Wyloguj</a>)</small></p>
             {% else %}
                 <a href="{% url 'login' %}" class="top-menu"><span class="glyphicon glyphicon-lock"></span></a>
             {% endif %}
-            <h1><a href="/">Strona o spaniu</a></h1>
+            <h1><a href="/">Strona o spaniu</a> - <a href="{% url 'item_list' %}">Nasz sklep</a></h1>
             {% block scripts %}
             {% endblock %}
         </div>

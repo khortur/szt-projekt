@@ -58,3 +58,7 @@ h1, h2, h3, h4 {
     color: darkgray;
     font-weight: bold;
 }
+
+.total-price {
+    font-weight: bold;
+}
