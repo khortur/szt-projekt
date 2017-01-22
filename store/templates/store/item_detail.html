@@ -13,6 +13,9 @@
 
 {% block content %}
     <div class="post">
+        {% if user.is_authenticated %}
+            <a class="btn btn-default" href="{% url 'item_edit' pk=item.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+        {% endif %}
         <div class = "col-sm-6 col-md-5">
             <div class = "thumbnail">
                 <img src = "../../media/{% if item.image %}{{ item.image }}{% else %}no_photo.jpg{% endif %}"
@@ -22,6 +25,7 @@
         <div class = "col-sm-6 col-md-7">
             <h1>{{ item.name }}</h1>
             <p>{{ item.description|linebreaks }}</p>
+            <p>Marka: {{ item.brand }}</p>
             <p>Cena: {{ item.price }}</p>
             <p>Ilość w magazynie: {{ item.stock }}</p>
             {% if item.stock > 0 %}
