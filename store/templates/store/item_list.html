@@ -1,4 +1,18 @@
 <html>
-    <p>Hej!</p>
-    <p>Działa!</p>
+    <head>
+        <title>Django Girls blog</title>
+    </head>
+    <body>
+        <div>
+            <h1><a href="">Django Girls Blog</a></h1>
+        </div>
+
+        {% for item in items %}
+            <div>
+                <h1><a href="">{{ item.name }}</a></h1>
+                <p>{{ item.description|linebreaksbr }}</p>
+                <p>Cena: {{ item.price }}</p>
+            </div>
+        {% endfor %}
+    </body>
 </html>
