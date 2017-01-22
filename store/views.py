@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Item
 from .forms import ItemForm
+from django.contrib.auth.decorators import login_required
 
 def item_list(request):
     # items = Item.objects.filter(stock__gt=0).order_by('price')
@@ -11,6 +12,7 @@ def item_detail(request, pk):
     item = get_object_or_404(Item, pk=pk)
     return render(request, 'store/item_detail.html', {'item': item})
 
+@login_required
 def item_new(request):
     if request.method == "POST":
         form = ItemForm(request.POST)
@@ -22,6 +24,7 @@ def item_new(request):
         form = ItemForm()
     return render(request, 'store/item_edit.html', {'form': form})
 
+@login_required
 def item_edit(request, pk):
     item = get_object_or_404(Item, pk=pk)
     if request.method == "POST":
@@ -33,3 +36,9 @@ def item_edit(request, pk):
     else:
         form = ItemForm(instance=item)
     return render(request, 'store/item_edit.html', {'form': form})
+
+@login_required
+def item_remove(request, pk):
+    item = get_object_or_404(Item, pk=pk)
+    item.delete()
+    return redirect('item_list')

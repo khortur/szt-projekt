@@ -15,6 +15,7 @@
     <div class="post">
         {% if user.is_authenticated %}
             <a class="btn btn-default" href="{% url 'item_edit' pk=item.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+            <a class="btn btn-default" href="{% url 'item_remove' pk=item.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
         {% endif %}
         <div class = "col-sm-6 col-md-5">
             <div class = "thumbnail">
