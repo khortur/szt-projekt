@@ -1,0 +1,51 @@
+{% extends 'blog/base.html' %}
+
+{% block scripts %}
+    <script>
+        $( document ).ready(function() {
+            $("#add-button").click(function() {
+{#                alert( "Handler for .click() called." );#}
+                $("#add-form").toggle(500);
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="post">
+        <div class = "col-sm-6 col-md-5">
+            <div class = "thumbnail">
+                <img src = "../../media/{% if item.image %}{{ item.image }}{% else %}no_photo.jpg{% endif %}"
+                     alt = "Place for cover" width="100%">
+            </div>
+        </div>
+        <div class = "col-sm-6 col-md-7">
+            <h1>{{ item.name }}</h1>
+            <p>{{ item.description|linebreaks }}</p>
+            <p>Cena: {{ item.price }}</p>
+            <p>Ilość w magazynie: {{ item.stock }}</p>
+            {% if item.stock > 0 %}
+                <div id="add-form" class="panel panel-default" hidden>
+                    <div class="panel-body">
+                        <form>
+                            <p>
+                                Ilość:
+                                <input type="number" min="1" max="{{ item.stock }}" value="1">
+                                <a class = "btn btn-primary"
+                                   role = "button" id="accept-button" {% if item.stock == 0 %}disabled{% endif %}>
+                                    Dodaj
+                                </a>
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            {% endif %}
+            <p>
+                <a class = "btn btn-primary"
+                   role = "button" id="add-button" {% if item.stock == 0 %}disabled{% endif %}>
+                    Dodaj do koszyka
+                </a>
+            </p>
+        </div>
+    </div>
+{% endblock %}

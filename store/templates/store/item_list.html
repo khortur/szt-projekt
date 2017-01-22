@@ -1,18 +1,31 @@
-<html>
-    <head>
-        <title>Django Girls blog</title>
-    </head>
-    <body>
-        <div>
-            <h1><a href="">Django Girls Blog</a></h1>
-        </div>
+{% extends 'blog/base.html' %}
 
-        {% for item in items %}
-            <div>
-                <h1><a href="">{{ item.name }}</a></h1>
-                <p>{{ item.description|linebreaksbr }}</p>
-                <p>Cena: {{ item.price }}</p>
-            </div>
-        {% endfor %}
-    </body>
-</html>
+{% block content %}
+    <div class="content container">
+        <div class = "row">
+            {% for item in items %}
+                <div class = "col-sm-6 col-md-4">
+                    <div class = "thumbnail">
+                        <a href="{% url 'item_detail' pk=item.pk %}">
+                            <img src = "media/{% if item.image %}{{ item.image }}{% else %}no_photo.jpg{% endif %}"
+                                alt = "Place for photo" width="300" height="300">
+                        </a>
+                    </div>
+
+                    <div class = "caption">
+                        <h2>{{ item.name }}</h2>
+                        <p>Cena: {{ item.price }}</p>
+                        <p>Ilość w magazynie: {{ item.stock }}</p>
+
+                        <p>
+                            <a href = "{% url 'item_detail' pk=item.pk %}" class = "btn btn-primary" role = "button"
+                                {% if item.stock == 0 %}disabled{% endif %}>
+                                Kup
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock content %}
