@@ -4,6 +4,12 @@ from django.contrib.auth.decorators import login_required
 from .models import Post, Comment
 from .forms import PostForm, CommentForm
 
+def handle_uploaded_file(f):
+    if (f != False):
+        with open('some/file/name.txt', 'wb+') as destination:
+            for chunk in f.chunks():
+                destination.write(chunk)
+
 def post_list(request):
     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
     return render(request, 'blog/post_list.html', {'posts': posts})
@@ -15,10 +21,16 @@ def post_detail(request, pk):
 @login_required
 def post_new(request):
     if request.method == "POST":
-        form = PostForm(request.POST)
+        form = PostForm(request.POST, request.FILES)
         if form.is_valid():
+            if 'image' in request.FILES:
+                image = request.POST['image']
+            else:
+                image = False
+            handle_uploaded_file(image)
             post = form.save(commit=False)
             post.author = request.user
+            post.image = form.cleaned_data['image']
             post.save()
             return redirect('post_detail', pk=post.pk)
     else:
@@ -29,10 +41,16 @@ def post_new(request):
 def post_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
-        form = PostForm(request.POST, instance=post)
+        form = PostForm(request.POST, request.FILES)
         if form.is_valid():
+            if 'image' in request.FILES:
+                image = request.POST['image']
+            else:
+                image = False
+            handle_uploaded_file(image)
             post = form.save(commit=False)
             post.author = request.user
+            post.image = form.cleaned_data['image']
             post.save()
             return redirect('post_detail', pk=post.pk)
     else:
