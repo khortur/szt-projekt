@@ -1,5 +1,11 @@
 {% extends 'blog/base.html' %}
 
+{% block scripts %}
+    <script>
+{#        location.reload();#}
+    </script>
+{% endblock %}
+
 {% block content %}
     {% for post in posts %}
         <div class="post">
