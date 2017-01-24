@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'social.apps.django_app.default',
     'blog',
     'store',
 ]
@@ -51,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'mbiernacki.urls'
@@ -67,6 +69,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social.apps.django_app.context_processors.backends',
+                'social.apps.django_app.context_processors.login_redirect',
             ],
         },
     },
@@ -136,6 +140,22 @@ SITE_ROOT = PROJECT_ROOT
 MEDIA_ROOT = os.path.join(SITE_ROOT, 'media')
 MEDIA_URL = '/media/'
 
-# REGISTRATION_EMAIL_HTML = False
-ACCOUNT_ACTIVATION_DAYS = 7 # One-week activation window; you may, of course, use a different value.
-REGISTRATION_AUTO_LOGIN = True # Automatically log the user in.
+ACCOUNT_ACTIVATION_DAYS = 7
+REGISTRATION_AUTO_LOGIN = True
+
+AUTHENTICATION_BACKENDS = (
+    'social.backends.github.GithubOAuth2',
+    'social.backends.twitter.TwitterOAuth',
+    'social.backends.facebook.FacebookOAuth2',
+
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_GITHUB_KEY = 'c073c309483275b53225'
+SOCIAL_AUTH_GITHUB_SECRET = 'f727ed74d03c1385d2d63097ab6657662e3a13f2'
+
+SOCIAL_AUTH_TWITTER_KEY = 'Ezn2QcUFInwb9wImttSDxSFKE'
+SOCIAL_AUTH_TWITTER_SECRET = '4YAbT4StJu915CNSxDlNKfiapFeF044l1eOK9cZ1m01z2fUXvo'
+
+SOCIAL_AUTH_FACEBOOK_KEY = '1226261347422870'  # App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = '226a8785b56a2a30ec0be457705c0a39'  # App Secret
