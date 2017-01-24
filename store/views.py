@@ -93,8 +93,9 @@ def accept_cart(request):
     for purchase in purchases:
         item = purchase.item
         item.stock -= purchase.amount
-        if item.stock == 0:
+        if item.stock <= 0:
             item.delete()
         else:
             item.save()
+        purchase.delete()
     return render(request, 'store/accept_cart.html', {})

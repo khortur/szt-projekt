@@ -5,7 +5,21 @@
         <div class="post">
             <p class="date">utworzony: {{ post.created_date|date:'d-m-Y' }}</p>
             <h1><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h1>
-            <p>{{ post.text|truncatechars:200 }}</p>
+            {% if post.image %}
+                <div class="row">
+                    <div class = "col-sm-6 col-md-4">
+                        <div class = "thumbnail">
+                            <img src = "../media/{{ post.image }}"
+                                 alt = "Place for photo" width="100%">
+                        </div>
+                    </div>
+                    <div class = "col-sm-6 col-md-8">
+                        <p>{{ post.text|linebreaksbr }}</p>
+                    </div>
+                </div>
+            {% else %}
+                <p>{{ post.text|linebreaksbr }}</p>
+            {% endif %}
         </div>
     {% endfor %}
 {% endblock %}

@@ -8,6 +8,9 @@
             </div>
         {% else %}
             {% if user.is_superuser %}
+                <div class="date">
+                    utworzony: {{ post.created_date|date:'d-m-Y' }}
+                </div>
                 <a class="btn btn-default" href="{% url 'post_publish' pk=post.pk %}">Opublikuj</a>
             {% endif %}
         {% endif %}
@@ -16,7 +19,21 @@
             <a class="btn btn-default" href="{% url 'post_remove' pk=post.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
         {% endif %}
         <h1>{{ post.title }}</h1>
-        <p>{{ post.text|linebreaksbr }}</p>
+        {% if post.image %}
+            <div class="row">
+                <div class = "col-sm-6 col-md-4">
+                    <div class = "thumbnail">
+                        <img src = "../../media/{{ post.image }}"
+                             alt = "Place for photo" width="100%">
+                    </div>
+                </div>
+                <div class = "col-sm-6 col-md-8">
+                    <p>{{ post.text|linebreaksbr }}</p>
+                </div>
+            </div>
+        {% else %}
+            <p>{{ post.text|linebreaksbr }}</p>
+        {% endif %}
     </div>
 
     <hr>
