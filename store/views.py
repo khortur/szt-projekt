@@ -2,18 +2,26 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Item, Purchase
 from .forms import ItemForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
+from django.http import Http404
+
 
 def item_list(request):
     # items = Item.objects.filter(stock__gt=0).order_by('price')
     items = Item.objects.order_by('price')
     return render(request, 'store/item_list.html', {"items": items})
 
+
 def item_detail(request, pk):
     item = get_object_or_404(Item, pk=pk)
     return render(request, 'store/item_detail.html', {'item': item})
 
+
 @login_required
 def item_new(request):
+    if not request.user.is_superuser:
+        raise Http404
+
     if request.method == "POST":
         form = ItemForm(request.POST)
         if form.is_valid():
@@ -24,8 +32,12 @@ def item_new(request):
         form = ItemForm()
     return render(request, 'store/item_edit.html', {'form': form})
 
+
 @login_required
 def item_edit(request, pk):
+    if not request.user.is_superuser:
+        raise Http404
+
     item = get_object_or_404(Item, pk=pk)
     if request.method == "POST":
         form = ItemForm(request.POST, instance=item)
@@ -37,11 +49,13 @@ def item_edit(request, pk):
         form = ItemForm(instance=item)
     return render(request, 'store/item_edit.html', {'form': form})
 
-@login_required
+
+@staff_member_required
 def item_remove(request, pk):
     item = get_object_or_404(Item, pk=pk)
     item.delete()
     return redirect('item_list')
+
 
 @login_required
 def cart(request):
@@ -49,11 +63,13 @@ def cart(request):
     purchases = Purchase.objects.filter(buyer_id__exact=user.id)
     return render(request, 'store/cart.html', {"purchases": purchases})
 
+
 @login_required
 def purchase_remove(request, pk):
     purchase = get_object_or_404(Purchase, pk=pk)
     purchase.delete()
     return redirect('cart')
+
 
 @login_required
 def purchase_add(request, item_id, amount):
@@ -68,6 +84,7 @@ def purchase_add(request, item_id, amount):
             purchase.amount = item.stock
     purchase.save()
     return redirect('cart')
+
 
 @login_required
 def accept_cart(request):

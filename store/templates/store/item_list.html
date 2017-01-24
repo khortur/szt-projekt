@@ -1,9 +1,11 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
-    <p>
-        <a class = "btn btn-primary" role = "button" href="{% url 'item_new' %}">Dodaj nowy produkt</a>
-    </p>
+    {% if user.is_superuser %}
+        <p>
+            <a class = "btn btn-primary" role = "button" href="{% url 'item_new' %}">Dodaj nowy produkt</a>
+        </p>
+    {% endif %}
     <div class="content container">
         <div class = "row">
             {% for item in items %}

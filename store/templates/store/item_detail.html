@@ -35,14 +35,14 @@
 
 {% block content %}
     <div class="post">
-        {% if user.is_authenticated %}
+        {% if user.is_superuser %}
             <a class="btn btn-default" href="{% url 'item_edit' pk=item.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
             <a class="btn btn-default" href="{% url 'item_remove' pk=item.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
         {% endif %}
         <div class = "col-sm-6 col-md-5">
             <div class = "thumbnail">
                 <img src = "../../media/{% if item.image %}{{ item.image }}{% else %}no_photo.jpg{% endif %}"
-                     alt = "Place for cover" width="100%">
+                     alt = "Place for photo" width="100%">
             </div>
         </div>
         <div class = "col-sm-6 col-md-7">

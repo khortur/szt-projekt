@@ -1,11 +1,5 @@
 {% extends 'blog/base.html' %}
 
-{% block scripts %}
-    <script>
-{#        location.reload();#}
-    </script>
-{% endblock %}
-
 {% block content %}
     {% for post in posts %}
         <div class="post">
@@ -13,8 +7,23 @@
                 {{ post.published_date }}
             </div>
             <h1><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h1>
-            <p>{{ post.text|linebreaksbr }}</p>
-            <a href="{% url 'post_detail' pk=post.pk %}">Komentarze: {{ post.approved_comments.count }}</a>
+            {% if post.image %}
+                <div class="row">
+                    <div class = "col-sm-6 col-md-4">
+                        <div class = "thumbnail">
+                            <img src = "./media/{{ post.image }}"
+                                 alt = "Place for photo" width="100%">
+                        </div>
+                    </div>
+                    <div class = "col-sm-6 col-md-8">
+                        <p>{{ post.text|linebreaksbr }}</p>
+                        <a href="{% url 'post_detail' pk=post.pk %}">Komentarze: {{ post.approved_comments.count }}{% if user.is_superuser %} ({{ post.not_approved_comments.count }}){% endif %}</a>
+                    </div>
+                </div>
+            {% else %}
+                <p>{{ post.text|linebreaksbr }}</p>
+                <a href="{% url 'post_detail' pk=post.pk %}">Komentarze: {{ post.approved_comments.count }}{% if user.is_superuser %} ({{ post.not_approved_comments.count }}){% endif %}</a>
+            {% endif %}
         </div>
     {% endfor %}
 {% endblock content %}

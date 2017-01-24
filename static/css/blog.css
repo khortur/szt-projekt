@@ -62,3 +62,8 @@ h1, h2, h3, h4 {
 .total-price {
     font-weight: bold;
 }
+
+.dark-red {
+    color: #aa0f0f !important;
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+}

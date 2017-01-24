@@ -1,16 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from .models import Post, Comment
 from .forms import PostForm, CommentForm
-
-
-def is_user_admin(request):
-    user = request.user
-    if user.is_superuser:
-        return True
-    else:
-        return False
+from django.http import Http404
 
 
 def handle_uploaded_file(f):
@@ -32,6 +26,9 @@ def post_detail(request, pk):
 
 @login_required
 def post_new(request):
+    if not request.user.is_superuser:
+        raise Http404
+
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
@@ -52,6 +49,9 @@ def post_new(request):
 
 @login_required
 def post_edit(request, pk):
+    if not request.user.is_superuser:
+        raise Http404
+
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES)
@@ -71,19 +71,20 @@ def post_edit(request, pk):
     return render(request, 'blog/post_edit.html', {'form': form})
 
 
-@login_required
+@staff_member_required
 def post_draft_list(request):
     posts = Post.objects.filter(published_date__isnull=True).order_by('created_date')
     return render(request, 'blog/post_draft_list.html', {'posts': posts})
 
 
-@login_required
+@staff_member_required
 def post_publish(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.publish()
     return redirect('post_detail', pk=pk)
 
-@login_required
+
+@staff_member_required
 def post_remove(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.delete()
@@ -104,14 +105,14 @@ def add_comment_to_post(request, pk):
     return render(request, 'blog/add_comment_to_post.html', {'form': form})
 
 
-@login_required
+@staff_member_required
 def comment_approve(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment.approve()
     return redirect('post_detail', pk=comment.post.pk)
 
 
-@login_required
+@staff_member_required
 def comment_remove(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     post_pk = comment.post.pk
