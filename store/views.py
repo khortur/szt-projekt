@@ -22,8 +22,8 @@ def item_new(request):
     if not request.user.is_superuser:
         raise Http404
 
-    if request.method == "POST":
-        form = ItemForm(request.POST)
+    if request.method == 'POST':
+        form = ItemForm(request.POST, request.FILES)
         if form.is_valid():
             item = form.save(commit=False)
             item.save()
@@ -39,8 +39,8 @@ def item_edit(request, pk):
         raise Http404
 
     item = get_object_or_404(Item, pk=pk)
-    if request.method == "POST":
-        form = ItemForm(request.POST, instance=item)
+    if request.method == 'POST':
+        form = ItemForm(request.POST, request.FILES, instance=item)
         if form.is_valid():
             item = form.save(commit=False)
             item.save()

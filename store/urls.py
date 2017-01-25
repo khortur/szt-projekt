@@ -13,4 +13,4 @@ urlpatterns = [
     url(r'^purchase/(?P<pk>\d+)/remove/$', views.purchase_remove, name='purchase_remove'),
     url(r'^purchase/add/(?P<item_id>\d+)/(?P<amount>\d+)/$', views.purchase_add, name='purchase_add'),
     url(r'^cart/accept$', views.accept_cart, name='accept_cart'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]

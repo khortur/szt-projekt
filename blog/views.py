@@ -29,17 +29,11 @@ def post_new(request):
     if not request.user.is_superuser:
         raise Http404
 
-    if request.method == "POST":
+    if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
-            if 'image' in request.FILES:
-                image = request.POST['image']
-            else:
-                image = False
-            handle_uploaded_file(image)
             post = form.save(commit=False)
             post.author = request.user
-            post.image = form.cleaned_data['image']
             post.save()
             return redirect('post_detail', pk=post.pk)
     else:
@@ -53,17 +47,11 @@ def post_edit(request, pk):
         raise Http404
 
     post = get_object_or_404(Post, pk=pk)
-    if request.method == "POST":
-        form = PostForm(request.POST, request.FILES)
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
-            if 'image' in request.FILES:
-                image = request.POST['image']
-            else:
-                image = False
-            handle_uploaded_file(image)
             post = form.save(commit=False)
             post.author = request.user
-            post.image = form.cleaned_data['image']
             post.save()
             return redirect('post_detail', pk=post.pk)
     else:

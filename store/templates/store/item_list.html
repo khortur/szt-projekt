@@ -12,7 +12,7 @@
                 <div class = "col-sm-6 col-md-4">
                     <div class = "thumbnail">
                         <a href="{% url 'item_detail' pk=item.pk %}">
-                            <img src = "media/{% if item.image %}{{ item.image }}{% else %}no_photo.jpg{% endif %}"
+                            <img src = "../media/{% if item.image %}{{ item.image }}{% else %}no_photo.jpg{% endif %}"
                                 alt = "Place for photo" width="300" height="300">
                         </a>
                     </div>
